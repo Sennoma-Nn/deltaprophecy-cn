@@ -7,8 +7,14 @@
   <link rel="icon" type="image/png" href="/assets/favicon.png">
   <style>
     @font-face {
-      font-family: 'ProphecyType';
+      font-family: 'PROPHECYTYPE';
       src: url('./assets/fonts/PROPHECYTYPE.ttf') format('truetype');
+      font-display: swap;
+    }
+    
+    @font-face {
+      font-family: 'MaruMonica';
+      src: url('./assets/fonts/MaruMonica.ttf') format('truetype');
       font-display: swap;
     }
 
@@ -40,7 +46,7 @@
       margin-top: 20px;
       margin-bottom: 10px;
       text-align: center;
-      font-family: 'ProphecyType', serif;
+      font-family: 'PROPHECYTYPE', 'MaruMonica', serif;
       font-size: 32px;
       line-height: 1;
       color: transparent;
@@ -61,7 +67,7 @@
       margin-top: 20px;
       margin-bottom: 10px;
       text-align: center;
-      font-family: 'ProphecyType', serif;
+      font-family: 'PROPHECYTYPE', 'MaruMonica', serif;
       font-size: 32px;
       line-height: 1;
       color: transparent;
@@ -255,7 +261,7 @@
     }
 
     .alt-font {
-      font-family: 'ProphecyType', serif;
+      font-family: 'PROPHECYTYPE', 'MaruMonica', serif;
     }
 
     input[type="range"] {
@@ -624,6 +630,17 @@
         <label for="fontScale" class="fileLabel">字体缩放</label>
         <input type="range" id="fontScale" min="0.5" max="2" step="0.05" value="1">
         <span id="fontScaleValue" class="fileLabel">1.00×</span>
+      </div>
+
+      <div class="advancedCell">
+        <div class="previewBox" style="font-family: 'MaruMonica';">
+          <span style="font-family: 'MaruMonica'">备用</span>
+        </div>
+        <div class="fileLabel" style="font-family: 'MaruMonica'">备用字体</div>
+        <label class="custom-file-upload small">
+          上传字体
+          <input type="file" id="fallbackFontUpload" accept=".ttf,.otf" style="display: none;" />
+        </label>
       </div>
 
     </div>
@@ -1261,6 +1278,14 @@
       div.style.display = div.style.display === "none" ? "block" : "none";
     }
     
+    // Load default fonts
+    Promise.all([
+      new FontFace('PROPHECYTYPE', 'url(./assets/fonts/PROPHECYTYPE.ttf)').load(),
+      new FontFace('MaruMonica', 'url(./assets/fonts/MaruMonica.ttf)').load()
+    ]).then(fonts => {
+      fonts.forEach(font => document.fonts.add(font));
+    });
+
     document.getElementById("fontUpload").addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -1278,11 +1303,50 @@
             const textContainer = document.getElementById("textContainer");
             const textContainerRed = document.getElementById("textContainerRed");
             
-            previewText.style.fontFamily = `"${fontName}", serif`;
+            previewText.style.fontFamily = `"${fontName}", 'PROPHECYTYPE', 'MaruMonica', serif`;
             label.textContent = fontName;
-            label.style.fontFamily = `"${fontName}", serif`;
-            textContainer.style.fontFamily = `"${fontName}", serif`;
-            textContainerRed.style.fontFamily = `"${fontName}", serif`;
+            label.style.fontFamily = `"${fontName}", 'PROPHECYTYPE', 'MaruMonica', serif`;
+            textContainer.style.fontFamily = `"${fontName}", 'PROPHECYTYPE', 'MaruMonica', serif`;
+            textContainerRed.style.fontFamily = `"${fontName}", 'PROPHECYTYPE', 'MaruMonica', serif`;
+            
+            const text = textContainer.innerHTML;
+            textContainer.innerHTML = '';
+            textContainer.innerHTML = text;
+            textContainerRed.innerHTML = '';
+            textContainerRed.innerHTML = text;
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById("fallbackFontUpload").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          const fontName = file.name.replace(/\.[^/.]+$/, "");
+          const customFont = new FontFace(fontName, `url(${reader.result})`);
+          customFont.load().then((loadedFont) => {
+            document.fonts.add(loadedFont);
+            
+            const textContainer = document.getElementById("textContainer");
+            const textContainerRed = document.getElementById("textContainerRed");
+            
+            const currentFont = textContainer.style.fontFamily.split(",")[0].trim();
+            textContainer.style.fontFamily = `${currentFont}, 'PROPHECYTYPE', "${fontName}", 'MaruMonica', serif`;
+            textContainerRed.style.fontFamily = `${currentFont}, 'PROPHECYTYPE', "${fontName}", 'MaruMonica', serif`;
+            
+            const fallbackPreview = document.querySelector(".advancedCell:nth-child(6) .previewBox span");
+            fallbackPreview.style.fontFamily = `"${fontName}", 'MaruMonica', serif`;
+            document.querySelector(".advancedCell:nth-child(6) .fileLabel").textContent = fontName;
+            document.querySelector(".advancedCell:nth-child(6) .fileLabel").style.fontFamily = `"${fontName}", 'MaruMonica', serif`;
+            
+            const text = textContainer.innerHTML;
+            textContainer.innerHTML = '';
+            textContainer.innerHTML = text;
+            textContainerRed.innerHTML = '';
+            textContainerRed.innerHTML = text;
           });
         };
         reader.readAsDataURL(file);
