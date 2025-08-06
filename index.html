@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="zh-CN" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DeltaProphecy</title>
+  <title>《三角符文》预言面板生成器</title>
   <link rel="icon" type="image/png" href="/assets/favicon.png">
   <style>
     @font-face {
@@ -18,9 +18,15 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: 'FrameTalkFont';
+      src: url('./assets/fonts/FrameTalkFont.ttf') format('truetype');
+      font-display: swap;
+    }
+
     html, body {
       margin: 0; padding: 0;
-      font-family: 'DTMSans', sans-serif;
+      font-family: 'FrameTalkFont', sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -310,7 +316,7 @@
     }
 
     input[type="text"] {
-      font-family: 'DTMSans', sans-serif;
+      font-family: 'FrameTalkFont', sans-serif;
       background-color: black;
       color: white;
       border: 2px solid white;
@@ -328,7 +334,7 @@
 
     .custom-file-upload {
       display: inline-block;
-      font-family: 'DTMSans', sans-serif;
+      font-family: 'FrameTalkFont', sans-serif;
       background-color: black;
       color: white;
       border: 2px solid white;
@@ -357,7 +363,7 @@
     }
 
     select#styleSelect {
-      font-family: 'DTMSans', sans-serif;
+      font-family: 'FrameTalkFont', sans-serif;
       background-color: black;
       color: white;
       border: 2px solid white;
@@ -436,7 +442,7 @@
     }
     
     .fileLabel {
-      font-family: 'DTMSans', sans-serif;
+      font-family: 'FrameTalkFont', sans-serif;
       font-size: 12px;
       margin-bottom: 4px;
       color: white;
@@ -444,7 +450,7 @@
 
     .custom-file-upload.small {
       display: inline-block;
-      font-family: 'DTMSans', sans-serif;
+      font-family: 'FrameTalkFont', sans-serif;
       background-color: black;
       color: white;
       border: 2px solid white;
@@ -539,28 +545,28 @@
   </style>
 </head>
 <body>
-  <h1>Deltarune Prophecy Panel Generator</h1>
+  <h1>《三角符文》预言面板生成器</h1>
   <input type="file" id="imgInput" accept="image/*" style="display:none;" />
-  <label for="imgInput" class="custom-file-upload">Upload Image</label>
-  <input type="text" id="textInput" placeholder="Enter prophecy text" />
+  <label for="imgInput" class="custom-file-upload">上传图片</label>
+  <input type="text" id="textInput" placeholder="输入预言文本" />
   <div style="margin-top: 10px;">
-    <label for="styleSelect">Style:</label>
+    <label for="styleSelect">风格：</label>
     <select id="styleSelect">
-      <option value="default">Default</option>
-      <option value="susie">Susie's Dark World</option>
-      <option value="final">The Final Prophecy</option>
+      <option value="default">默认</option>
+      <option value="susie">苏西的暗世界</option>
+      <option value="final">最终预言</option>
     </select>
   </div>
   <div style="display: flex; justify-content: center; width: 100%;">
     <div class="checkbox-container">
-      <label for="imgScale">Image Scale:</label>
+      <label for="imgScale">图片缩放：</label>
       <input type="range" id="imgScale" min="0.1" max="3" value="1" step="0.01" />
       <span id="imgScaleValue">1.00×</span>
     </div>
   </div>
   <div style="display: flex; justify-content: center; width: 100%;">
     <div class="checkbox-container">
-      <label for="imgYOffset">Image Y Offset:</label>
+      <label for="imgYOffset">图片 Y 偏移：</label>
       <input type="range" id="imgYOffset" min="-100" max="100" value="0" />
       <span id="imgYOffsetValue">0px</span>
     </div>
@@ -568,7 +574,7 @@
 
   <!-- TESTING -->
   <div style="height: 10px;"></div>
-  <button onclick="toggleAdvancedSettings()" class="custom-file-upload">Advanced Settings</button>
+  <button onclick="toggleAdvancedSettings()" class="custom-file-upload">高级设置</button>
   
   <div id="advancedSettings" style="display: none; margin-top: 10px;">
     <div id="advancedGrid">
@@ -579,7 +585,7 @@
         </div>
         <div id="fontLabel" class="fileLabel" style="font-family: 'ProphecyType';">ProphecyType</div>
         <label class="custom-file-upload small">
-          Upload Font
+          上传字体
           <input type="file" id="fontUpload" accept=".ttf,.otf" style="display: none;" />
         </label>
       </div>
@@ -587,9 +593,9 @@
       <!-- Text Texture -->
       <div class="advancedCell">
         <img id="textPreview" class="previewBox" />
-        <div class="fileLabel">Text Texture</div>
+        <div class="fileLabel">文字纹理</div>
         <label class="custom-file-upload small">
-          Upload Texture
+          上传纹理
           <input type="file" id="textTextureUpload" accept="image/*" style="display: none;" />
         </label>
       </div>
@@ -597,9 +603,9 @@
       <!-- Panel -->
       <div class="advancedCell">
         <img id="panelPreview" class="previewBox" />
-        <div class="fileLabel">Panel Texture</div>
+        <div class="fileLabel">面板纹理</div>
         <label class="custom-file-upload small">
-          Upload Texture
+          上传纹理
           <input type="file" id="panelImageUpload" accept="image/*" style="display: none;" />
         </label>
       </div>
@@ -607,15 +613,15 @@
       <!-- Background -->
       <div class="advancedCell">
         <img id="bgPreview" class="previewBox" />
-        <div class="fileLabel">Background Texture</div>
+        <div class="fileLabel">背景纹理</div>
         <label class="custom-file-upload small">
-          Upload Texture
+          上传纹理
           <input type="file" id="bgImageUpload" accept="image/*" style="display: none;" />
         </label>
       </div>
 
       <div class="sliderWrapper">
-        <label for="fontScale" class="fileLabel">Font Scale</label>
+        <label for="fontScale" class="fileLabel">字体缩放</label>
         <input type="range" id="fontScale" min="0.5" max="2" step="0.05" value="1">
         <span id="fontScaleValue" class="fileLabel">1.00×</span>
       </div>
@@ -627,8 +633,8 @@
   <div style="height: 30px;"></div>
   <div id="sineWrapper">
     <div id="overlayWrapper">
-      <div id="textContainer">Your prophecy here</div>
-      <div id="textContainerRed">Your prophecy here</div>
+      <div id="textContainer">这里写你的预言</div>
+      <div id="textContainerRed">这里写你的预言</div>
       <div id="output">
         <canvas id="background" width="512" height="256"></canvas>
         <canvas id="backgroundRed" width="512" height="256"></canvas>
@@ -643,7 +649,7 @@
   </div>
 
   <div id="directions">
-  <p>Upload a white-only or black-and-white image above to begin. Type your prophecy text in the box. You can use \n to move to a new line.<br><br>I couldn't find a way to get GIF exports to work, so you kinda just have to take a screenshot.<br><br>If your image isn't monochrome, you can make it so <a href="./monochrome.html" target="_blank" rel="noopener noreferrer">here</a>.
+  <p>上传一张纯白色或黑白图片开始制作。在文本框中输入您的预言文字。您可以使用 \n 来换行。<br><br>我无法找到导出GIF的方法，所以您只能截图保存。<br><br>如果您的图片不是单色的，可以在<a href="./monochrome.html" target="_blank" rel="noopener noreferrer">这里</a>转换为单色。
 </p>
   </div>
   <footer>
@@ -1082,7 +1088,7 @@
     });
 
     textInput.addEventListener('input', () => {
-      const formattedText = (textInput.value || 'Your prophecy here').replace(/\\n/g, '<br>');
+      const formattedText = (textInput.value || '这里写你的预言').replace(/\\n/g, '<br>');
       textContainer.innerHTML = formattedText;
       textContainerRed.innerHTML = formattedText;
     });
@@ -1370,4 +1376,4 @@
       });
 </script>
 </body>
-</html> 
+</html>
